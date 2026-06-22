@@ -8,6 +8,14 @@ A scheduled, self-healing data pipeline. Companion to [Pulse](https://github.com
 
 ---
 
+## Pipeline in action
+
+[Airflow Grid view — retail_daily DAG](docs/retail_daily-grid-airflow.pdf)
+
+All four tasks (`generate → load_to_duckdb → dbt_run → dbt_test`) completing successfully across scheduled runs.
+
+---
+
 ## The pipeline
 
 ```
