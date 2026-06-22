@@ -1,0 +1,16 @@
+.env
+*.duckdb
+*.duckdb.wal
+data/staging/
+/tmp/
+__pycache__/
+*.pyc
+.venv/
+venv/
+transform/target/
+transform/dbt_packages/
+transform/logs/
+airflow/logs/
+airflow/plugins/
+*.egg-info/
+.ruff_cache/

@@ -1,0 +1,60 @@
+version: 2
+
+models:
+  - name: stg_orders
+    description: >
+      Cleaned and filtered order lines. Excludes returns (negative quantity),
+      zero-price rows, and lines with no customer ID.
+    columns:
+      - name: invoice_no
+        description: Invoice number.
+        tests:
+          - not_null
+
+      - name: stock_code
+        description: Product code.
+        tests:
+          - not_null
+
+      - name: quantity
+        description: Units sold. Always positive after filtering.
+        tests:
+          - not_null
+
+      - name: price
+        description: Unit price in GBP. Always positive after filtering.
+        tests:
+          - not_null
+
+      - name: customer_id
+        description: Customer identifier. Never null after filtering.
+        tests:
+          - not_null
+
+      - name: country
+        description: Customer country.
+        tests:
+          - not_null
+          - accepted_values:
+              values:
+                - United Kingdom
+                - Germany
+                - France
+                - Netherlands
+                - Belgium
+                - Spain
+                - Australia
+                - Switzerland
+                - Portugal
+                - Norway
+                - Sweden
+                - Denmark
+                - Finland
+                - United States
+                - Japan
+                - Singapore
+
+      - name: line_total_gbp
+        description: Computed revenue for this line (quantity x price).
+        tests:
+          - not_null

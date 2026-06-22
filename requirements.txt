@@ -1,0 +1,6 @@
+# For airflow standalone (local dev without Docker).
+# Install Airflow separately via the constrained install in the README.
+apache-airflow==2.9.3
+duckdb>=0.10.0
+dbt-duckdb>=1.8.0
+ruff>=0.4.0

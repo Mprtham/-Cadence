@@ -1,0 +1,61 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+jobs:
+  lint-and-import:
+    name: Lint DAG and verify import
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Install dependencies
+        run: |
+          pip install --quiet \
+            "apache-airflow==2.9.3" \
+            "duckdb>=0.10.0" \
+            "dbt-duckdb>=1.8.0" \
+            "ruff>=0.4.0"
+
+      - name: Lint with ruff
+        run: ruff check dags/ include/
+
+      - name: Verify DAG imports cleanly
+        env:
+          CADENCE_DB_PATH: /tmp/cadence_ci.duckdb
+          CADENCE_DATA_DIR: /tmp/cadence
+        run: |
+          python -c "
+          import sys
+          sys.path.insert(0, 'include')
+          from dags.retail_daily import dag
+          assert dag.dag_id == 'retail_daily', 'Wrong dag_id'
+          tasks = [t.task_id for t in dag.tasks]
+          expected = ['generate', 'load_to_duckdb', 'dbt_run', 'dbt_test']
+          assert tasks == expected, f'Task order wrong: {tasks}'
+          print('DAG import OK. Tasks:', tasks)
+          "
+
+      - name: Verify task dependencies
+        env:
+          CADENCE_DB_PATH: /tmp/cadence_ci.duckdb
+          CADENCE_DATA_DIR: /tmp/cadence
+        run: |
+          python -c "
+          import sys
+          sys.path.insert(0, 'include')
+          from dags.retail_daily import dag
+          deps = {t.task_id: [u.task_id for u in t.upstream_list] for t in dag.tasks}
+          assert deps['load_to_duckdb'] == ['generate'], f'Bad upstream: {deps}'
+          assert deps['dbt_run'] == ['load_to_duckdb'], f'Bad upstream: {deps}'
+          assert deps['dbt_test'] == ['dbt_run'], f'Bad upstream: {deps}'
+          print('Dependencies OK:', deps)
+          "

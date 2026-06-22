@@ -1,0 +1,7 @@
+cadence:
+  target: dev
+  outputs:
+    dev:
+      type: duckdb
+      path: "{{ env_var('CADENCE_DB_PATH', '/opt/airflow/data/cadence.duckdb') }}"
+      threads: 4

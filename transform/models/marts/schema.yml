@@ -1,0 +1,30 @@
+version: 2
+
+models:
+  - name: mart_daily_revenue
+    description: One row per calendar day. Aggregates clean order lines.
+    columns:
+      - name: invoice_date_day
+        description: Calendar date.
+        tests:
+          - not_null
+          - unique
+
+      - name: gross_revenue_gbp
+        description: Total revenue in GBP for the day.
+        tests:
+          - not_null
+
+  - name: mart_country_revenue
+    description: One row per country. Aggregates across all loaded dates.
+    columns:
+      - name: country
+        description: Country name.
+        tests:
+          - not_null
+          - unique
+
+      - name: gross_revenue_gbp
+        description: Total revenue in GBP for the country.
+        tests:
+          - not_null
