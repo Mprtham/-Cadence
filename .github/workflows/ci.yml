@@ -22,8 +22,8 @@ jobs:
           pip install --quiet \
             "apache-airflow==2.9.3" \
             "duckdb>=0.10.0" \
-            "dbt-duckdb>=1.8.0" \
-            "ruff>=0.4.0"
+            "ruff>=0.4.0" \
+            --constraint "https://raw.githubusercontent.com/apache/airflow/constraints-2.9.3/constraints-3.11.txt"
 
       - name: Lint with ruff
         run: ruff check dags/ include/
