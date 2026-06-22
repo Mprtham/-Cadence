@@ -3,6 +3,9 @@
 Pulse builds the pipeline. Cadence operates it on a schedule. Companion project: [Pulse](https://github.com/Mprtham/pulse)
 
 ![Airflow DAG graph](docs/dag-graph.png)
+
+![DAG run details - 4 successful runs](docs/dag-details.png)
+
 [Full grid view (PDF)](docs/retail_daily-grid-airflow.pdf)
 
 ---
